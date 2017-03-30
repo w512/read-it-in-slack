@@ -62,7 +62,7 @@ class Bot(object):
                     tweet['text'],
                     tweet['attachments'],
                 )
-            time.sleep(5)
+            time.sleep(10)
 
 
 
