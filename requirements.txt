@@ -1,4 +1,4 @@
 slacker
 twython
 websocket-client
-
+sqlalchemy

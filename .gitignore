@@ -90,3 +90,5 @@ env
 .ropeproject
 
 local_settings.py
+.DS_Store
+
