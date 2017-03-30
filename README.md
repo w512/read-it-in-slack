@@ -3,7 +3,7 @@
 With this bot you can get and read all useful information in the one place – **Slack**.
 
 Now it can:
-1. Search for information in Twitter, and post the result to chosen Slack channel.
+1. Search for information in Twitter, and post the result to the chosen Slack channel.
 
 ### Installation
 
