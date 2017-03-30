@@ -11,7 +11,7 @@ from .models import (
 
 
 class Twi(object):
-    def __init__(self, app_key, app_secret, oauth_token, oauth_token_secret, slack_channel):
+    def __init__(self, app_key, app_secret, oauth_token, oauth_token_secret, slack_channel, search_term):
         self.twitter = Twython(
             app_key,
             app_secret,
@@ -19,7 +19,7 @@ class Twi(object):
             oauth_token_secret
         )
 
-        self.search_term = '"Python developer"'
+        self.search_term = search_term
         self.slack_channel = slack_channel
 
     def load_tweets(self):

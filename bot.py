@@ -14,7 +14,9 @@ from settings import (
     TWITTER_APP_KEY,
     TWITTER_APP_SECRET,
     TWITTER_OAUTH_TOKEN,
-    TWITTER_OAUTH_TOKEN_SECRET
+    TWITTER_OAUTH_TOKEN_SECRET,
+
+    SEARCH_TERM,
 )
 
 from twi import Twi
@@ -29,6 +31,7 @@ class Bot(object):
             TWITTER_OAUTH_TOKEN,
             TWITTER_OAUTH_TOKEN_SECRET,
             SLACK_CHANNEL,
+            SEARCH_TERM,
         )
 
         self.client = SlackClient(
@@ -65,6 +68,9 @@ class Bot(object):
             time.sleep(10)
 
 
+if __name__ == '__main__':
+    bot = Bot()
+    bot.run()
 
 
 
