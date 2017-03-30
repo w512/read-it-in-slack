@@ -3,8 +3,8 @@
 ### Installation
 
 ```console
-git clone #github_clone_project_url#
-cd #project_folder#
+git clone <github_clone_project_url>
+cd <project_folder>
 virtualenv --python=python3 --no-site-packages env
 source ./env/bin/activate
 pip install -r requirements.txt
