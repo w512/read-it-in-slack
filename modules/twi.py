@@ -26,7 +26,8 @@ class Twi(object):
         result = self.twitter.search(q=self.search_term)
         return result['statuses']
 
-    def get_next_tweet(self):
+    def get_next_tweets(self):
+        tweets_for_posting = []
         tweets = self.load_tweets()
         for tweet in tweets:
             if not PostedTweets.tweet_was_posted(tweet['id_str'], self.slack_channel):
@@ -34,12 +35,12 @@ class Twi(object):
                 text = tweet['text']
                 ts = time.strptime(tweet['created_at'],'%a %b %d %H:%M:%S +0000 %Y')
 
-                PostedTweets.processing_tweet(tweet, self.search_term, self.slack_channel)
+                PostedTweets.save_tweet_info(tweet, self.search_term, self.slack_channel)
 
                 for ext_link in tweet['entities']['urls']:
                     text = text.replace(ext_link['url'], ext_link['expanded_url'])
 
-                return {
+                tweets_for_posting.append({
                     'text': '',
                     'attachments': [{
                         'fallback': text,
@@ -55,5 +56,5 @@ class Twi(object):
                         'footer_icon': 'https://abs.twimg.com/icons/apple-touch-icon-192x192.png',
                         'ts': time.mktime(ts),
                     }]
-                }
-        return None
+                })
+        return tweets_for_posting

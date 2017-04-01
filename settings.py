@@ -2,23 +2,29 @@
 # -*- coding: utf-8 -*-
 
 
-SLACK_API_TOKEN = ''
-SLACK_BOT_ICON = ''
-SLACK_BOT_EMOJI = ''
-SLACK_CHANNEL = ''
+SLACK_BOT_ICON = 'http://lorempixel.com/output/cats-q-c-64-64-3.jpg'
+SLACK_BOT_EMOJI = ':godmode:'
+SLACK_CHANNEL = 'general'
 
 
-TWITTER_APP_KEY = ''
-TWITTER_APP_SECRET = ''
-TWITTER_OAUTH_TOKEN = ''
-TWITTER_OAUTH_TOKEN_SECRET = ''
+DB_ENGINE = 'sqlite:///modules/db.sqlite'
 
+SEARCH_TERM = 'sale'
 
-DB_ENGINE = None
+FEEDS = [
+    {
+        'name': 'Nikolay\'s Blog',
+        'url': 'https://blokhin.us/rss/',
+    },
+    {
+        'name': 'Planet Python',
+        'url': 'http://planetpython.org/rss20.xml',
+    },
+]
 
 
 try:
     from local_settings import *
 except ImportError:
-    print('WARNING: There is no local_settings.py!')
+    print('ERROR: There is no local_settings.py!')
 

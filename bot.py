@@ -5,42 +5,37 @@ import _thread
 
 from slackclient import SlackClient
 
-from settings import (
-    SLACK_API_TOKEN,
-    SLACK_BOT_ICON,
-    SLACK_BOT_EMOJI,
-    SLACK_CHANNEL,
-
-    TWITTER_APP_KEY,
-    TWITTER_APP_SECRET,
-    TWITTER_OAUTH_TOKEN,
-    TWITTER_OAUTH_TOKEN_SECRET,
-
-    SEARCH_TERM,
-)
-
-from twi import Twi
+import settings
+from modules import Twi, Rss
 
 
 
 class Bot(object):
     def __init__(self):
+
         self.twi = Twi(
-            TWITTER_APP_KEY,
-            TWITTER_APP_SECRET,
-            TWITTER_OAUTH_TOKEN,
-            TWITTER_OAUTH_TOKEN_SECRET,
-            SLACK_CHANNEL,
-            SEARCH_TERM,
+            settings.TWITTER_APP_KEY,
+            settings.TWITTER_APP_SECRET,
+            settings.TWITTER_OAUTH_TOKEN,
+            settings.TWITTER_OAUTH_TOKEN_SECRET,
+            settings.SLACK_CHANNEL,
+            settings.SEARCH_TERM,
+        )
+
+        self.rss = Rss(
+            settings.FEEDS,
+            settings.SLACK_CHANNEL,
         )
 
         self.client = SlackClient(
-            SLACK_API_TOKEN,
-            bot_icon=SLACK_BOT_ICON,
-            bot_emoji=SLACK_BOT_EMOJI
+            settings.SLACK_API_TOKEN,
+            bot_icon=settings.SLACK_BOT_ICON,
+            bot_emoji=settings.SLACK_BOT_EMOJI
         )
 
-        self.selected_chanel = self.client.find_channel_by_name(SLACK_CHANNEL)
+        self.selected_chanel = self.client.find_channel_by_name(
+            settings.SLACK_CHANNEL
+        )
 
     def run(self):
         self.client.rtm_connect()
@@ -58,13 +53,23 @@ class Bot(object):
             # for event in events:
             #     if event.get('type') != 'message':
             #         continue
-            tweet = self.twi.get_next_tweet()
-            if tweet:
+
+            tweets = self.twi.get_next_tweets()
+            for tweet in tweets:
                 self.client.send_message(
                     self.selected_chanel,
                     tweet['text'],
                     tweet['attachments'],
                 )
+
+            entries = self.rss.get_next_entries()
+            for entry in entries:
+                self.client.send_message(
+                    self.selected_chanel,
+                    entry['text'],
+                    entry['attachments'],
+                )
+
             time.sleep(10)
 
 

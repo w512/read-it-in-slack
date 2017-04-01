@@ -2,3 +2,5 @@ slacker
 twython
 websocket-client
 sqlalchemy
+feedparser
+
