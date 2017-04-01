@@ -4,6 +4,7 @@ With this bot you can get and read all useful information in the one place – *
 
 Now it can:
 1. Search for information in Twitter, and post the result to the chosen Slack channel.
+2. Monitor the RSS feeds, and post the updates to the channel.
 
 ### Installation
 
