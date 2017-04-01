@@ -18,7 +18,7 @@ $ pip install -r requirements.txt
 
 ### Run
 
-1) put your keys and info to local_settings.py
+1) put your keys and info to the local_settings.py
 2) run bot:
 ```console
 $ python bot.py
