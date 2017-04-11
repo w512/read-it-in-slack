@@ -91,6 +91,40 @@ class PostedRssEntry(Base):
         return False
 
 
+class PostedFlickrPhoto(Base):
+    __tablename__ = 'PostedFlickrPhoto'
+    id = Column(Integer, primary_key=True)
+    photo_link = Column(String)
+    channel_name = Column(String)
+    post_date = Column(DateTime)
+
+    UniqueConstraint(photo_link, channel_name)
+
+    @classmethod
+    def save_photo_info(cls, photo_link, channel_name):
+        db_session = DBSession()
+        new_entry = cls(
+            photo_link = photo_link,
+            channel_name = channel_name,
+            post_date = datetime.datetime.utcnow(),
+        )
+        db_session.add(new_entry)
+        db_session.commit()
+        db_session.close()
+
+    @classmethod
+    def photo_was_posted(cls, photo_link, channel_name):
+        db_session = DBSession()
+        photo_from_db = db_session.query(cls.photo_link).filter(
+            cls.photo_link == photo_link,
+            cls.channel_name == channel_name,
+        ).one_or_none()
+        db_session.close()
+        if photo_from_db:
+            return True
+        return False
+
+
 engine = create_engine(DB_ENGINE)
 Base.metadata.bind = engine
 Base.metadata.create_all(engine)

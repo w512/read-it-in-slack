@@ -6,12 +6,12 @@ import _thread
 from slackclient import SlackClient
 
 import settings
-from modules import Twi, Rss
+from modules import Twi, Rss, Flickr
 
 
 
 class Bot(object):
-    def __init__(self):
+    def __init__(self, active_plugins):
 
         self.twi = Twi(
             settings.TWITTER_APP_KEY,
@@ -27,6 +27,11 @@ class Bot(object):
             settings.SLACK_CHANNEL,
         )
 
+        self.flickr = Flickr(
+            settings.FLICKR_TAGS,
+            settings.SLACK_CHANNEL,
+        )
+
         self.client = SlackClient(
             settings.SLACK_API_TOKEN,
             bot_icon=settings.SLACK_BOT_ICON,
@@ -36,6 +41,8 @@ class Bot(object):
         self.selected_chanel = self.client.find_channel_by_name(
             settings.SLACK_CHANNEL
         )
+
+        self.active_plugins = active_plugins
 
     def run(self):
         self.client.rtm_connect()
@@ -54,27 +61,45 @@ class Bot(object):
             #     if event.get('type') != 'message':
             #         continue
 
-            tweets = self.twi.get_next_tweets()
-            for tweet in tweets:
-                self.client.send_message(
-                    self.selected_chanel,
-                    tweet['text'],
-                    tweet['attachments'],
-                )
+            if self.active_plugins['twitter']:
+                tweets = self.twi.get_next_tweets()
+                for tweet in tweets:
+                    self.client.send_message(
+                        self.selected_chanel,
+                        tweet['text'],
+                        tweet['attachments'],
+                    )
 
-            entries = self.rss.get_next_entries()
-            for entry in entries:
-                self.client.send_message(
-                    self.selected_chanel,
-                    entry['text'],
-                    entry['attachments'],
-                )
+            if self.active_plugins['rss']:
+                entries = self.rss.get_next_entries()
+                for entry in entries:
+                    self.client.send_message(
+                        self.selected_chanel,
+                        entry['text'],
+                        entry['attachments'],
+                    )
+
+            if self.active_plugins['flickr']:
+                photos = self.flickr.get_next_photos()
+                for photo in photos:
+                    self.client.send_message(
+                        self.selected_chanel,
+                        photo['text'],
+                        photo['attachments'],
+                    )
 
             time.sleep(10)
 
 
 if __name__ == '__main__':
-    bot = Bot()
+
+    active_plugins = {
+        'twitter': False,
+        'rss': False,
+        'flickr': True,
+    }
+
+    bot = Bot(active_plugins)
     bot.run()
 
 

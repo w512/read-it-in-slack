@@ -3,4 +3,5 @@
 
 from .twi import Twi
 from .rss import Rss
+from .flickr import Flickr
 

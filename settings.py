@@ -6,10 +6,10 @@ SLACK_BOT_ICON = 'http://lorempixel.com/output/cats-q-c-64-64-3.jpg'
 SLACK_BOT_EMOJI = ':godmode:'
 SLACK_CHANNEL = 'general'
 
-
 DB_ENGINE = 'sqlite:///modules/db.sqlite'
 
 SEARCH_TERM = 'sale'
+FLICKR_TAGS = ['emacs', 'editor']
 
 FEEDS = [
     {
